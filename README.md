@@ -19,8 +19,8 @@ For anything to work you'll need to enable SCL and I2C on your Pi:
   * sudo pip3 install bme680
 
 Tutorials for these two boards are available here:
-https://learn.adafruit.com/adafruit-sgp30-gas-tvoc-eco2-mox-sensor/circuitpython-wiring-test
-https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-bme680-breakout
+* https://learn.adafruit.com/adafruit-sgp30-gas-tvoc-eco2-mox-sensor/circuitpython-wiring-test
+* https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-bme680-breakout
 
 ## Example script
 
