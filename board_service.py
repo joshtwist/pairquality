@@ -12,7 +12,7 @@ def init():
     i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
     sgp30 = adafruit_sgp30.Adafruit_SGP30(i2c)
     sensor = bme680.BME680()
-    serial = [hex(i) for i in sgp30.serial]
+    serial = '-'.join(str(e) for e in sgp30.serial)
     sgp30.iaq_init()
     print('Initiated real Board Service for SGP30 Serial ', serial)
 
@@ -32,11 +32,11 @@ def get_baselines():
     # sgp30.baseline_eCO2, sgp30.baseline_TVOC
     return {
         'serial': serial,
-        'eCO2': sgp30.baseline_eCO2,
-        'TVOC': sgp30.baseline_TVOC
+        'eCO2': hex(sgp30.baseline_eCO2),
+        'TVOC': hex(sgp30.baseline_TVOC)
     }
 
-def set_board_baselines( eCO2, TVOC):
+def set_board_baselines(eCO2, TVOC):
 
     # convert strings to hex if necessary
     if isinstance(eC02, str):
@@ -46,6 +46,7 @@ def set_board_baselines( eCO2, TVOC):
         TVOC = int(TVOC, 16)
 
     sgp30.set_iaq_baseline(eCO2, TVOC)
+    print('set_iaq_baseline %s %s' % (hex(eC02), hex(TVOC)))
     
 def get_serial():
     return serial

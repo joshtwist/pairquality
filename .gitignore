@@ -130,3 +130,6 @@ dmypy.json
 
 # config file
 credentials.json
+
+# log output
+nohup.out

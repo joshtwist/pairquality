@@ -1,6 +1,7 @@
 from __future__ import print_function
 import pickle
 import os.path
+import sys
 import time
 import importlib
 from datetime import datetime
@@ -9,9 +10,12 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
+args_count = len(sys.argv) - 1
 
-board_service = importlib.import_module('board_service_mock')
-# board_service = importlib.import_module('board_service')
+if args_count > 0 and sys.argv[1] == 'mock':
+    board_service = importlib.import_module('board_service_mock')
+else:
+    board_service = importlib.import_module('board_service')
 
 board_service.init()
 
@@ -100,12 +104,22 @@ def writeReading(readings):
     request = getSheets().values().append(range=READINGS_RANGE, spreadsheetId=SPREADSHEET_ID, insertDataOption='INSERT_ROWS', valueInputOption='RAW', body=body)
     response = request.execute()
 
-    print('updated readings')
+    output = "Updated readings: {0:.2f} C, {1:.2f} hPa, {2:.2f} %RH, {3:.0f} CO2 ppm, {4:.0f} VOC ppb".format(
+        readings['temperature'], readings['pressure'], readings['humidity'], readings['eCO2'], readings['TVOC'])
+    print(output)
 
 def main():
 
-    sec_gap = 60 # 60
-    baseline_frequency = 60 # 60
+    sec_gap = 60 # how many seconds between readings
+    baseline_frequency = 60 # how many readings between baseline updates
+
+    if args_count > 1:
+        sec_gap = int(sys.argv[2])
+
+    if args_count > 2:
+        baseline_frequency = int(sys.argv[3])
+
+    print("Initialized with reading delay %ss and baseline frequency of every %s reads" % (sec_gap, baseline_frequency))
 
     counter = 0
     serial = board_service.get_readings()['serial']

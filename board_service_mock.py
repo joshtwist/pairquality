@@ -8,18 +8,18 @@ def init():
 def get_readings():
     return {
         'serial': serial,
-        'eCO2': 'MOCK_%s' % random.randint(400,8000),
-        'TVOC': 'MOCK_%s' % random.randint(0, 25000),
-        'temperature': 'MOCK_%s' % random.randint(21, 40),
-        'pressure': 'MOCK_%s' % random.randint(1000,2000),
-        'humidity': 'MOCK_%s' % random.randint(0,50)
+        'eCO2': random.randrange(0,2),
+        'TVOC': random.randrange(0,2),
+        'temperature': random.randrange(0,2),
+        'pressure': random.randrange(0,2),
+        'humidity': random.randrange(0,2)
     }
 
 def get_baselines():
     return {
         'serial': serial,
-        'eCO2': 'MOCK_0x%s' % random.randint(100,999),
-        'TVOC': 'MOCK_0x%s' % random.randint(100,999)
+        'eCO2': random.randrange(0,2),
+        'TVOC': random.randrange(0,2)
     }
 
 def set_board_baselines( eCO2, TVOC):
