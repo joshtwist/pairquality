@@ -1,4 +1,4 @@
-# Welcome to the PairQuality project
+# Welcome to the pAirQuality project
 
 This is a simple project for the raspberry pi that allows you to build your own air quality sensor at home using stock components from sites like sparkfun.com
 
