@@ -17,6 +17,7 @@ For anything to work you'll need to enable SCL and I2C on your Pi:
 3. Install the packages for the two components
   * sudo pip3 install adafruit-circuitpython-sgp30
   * sudo pip3 install bme680
+  * sudo pip3 install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
 
 Tutorials for these two boards are available here:
 * https://learn.adafruit.com/adafruit-sgp30-gas-tvoc-eco2-mox-sensor/circuitpython-wiring-test
