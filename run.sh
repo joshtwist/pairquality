@@ -1,7 +1,7 @@
 #!/bin/bash
 
 myscript(){
-    python3 ./quickstart.py 
+    python3 ./quickstart.py
 }
 
 until myscript; do
