@@ -1,0 +1,14 @@
+[Unit]
+Description=pAirQuality
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 quickstart.py
+WorkingDirectory=/home/pi/pairquality
+StandardOutput=/home/pi/pairquality/log.log
+StandardError=/home/pi/pairquality/error.log
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
