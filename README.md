@@ -25,6 +25,8 @@ Tutorials for these two boards are available here:
 
 ## Kicking off the process
 
+Recommend using the bash script (`run.sh`) to restart the python script in the event of a failure and `nohup` to dump the output to file for investigation later. 
+
 ` nohup ./run.sh &
 
 This will dump the logs in a file called nohup.out. If you see a permission denied error, make sure the run.sh file is executable:
