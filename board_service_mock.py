@@ -1,11 +1,13 @@
 import random
 
 def init():
-    print('⚠️ WARNING - initiated the mock Board Service ⚠️')
+    global serial 
+    serial = 'MOCK_fake_unit'
+    print('⚠️ WARNING - initiated the mock Board Service ⚠️ Serial: ', serial)
 
 def get_readings():
     return {
-        'serial': 'MOCK_fake_unit',
+        'serial': serial,
         'eCO2': 'MOCK_%s' % random.randint(400,8000),
         'TVOC': 'MOCK_%s' % random.randint(0, 25000),
         'temperature': 'MOCK_%s' % random.randint(21, 40),
@@ -15,7 +17,7 @@ def get_readings():
 
 def get_baselines():
     return {
-        'serial': 'MOCK_fake_unit',
+        'serial': serial,
         'eCO2': 'MOCK_0x%s' % random.randint(100,999),
         'TVOC': 'MOCK_0x%s' % random.randint(100,999)
     }
@@ -25,4 +27,4 @@ def set_board_baselines( eCO2, TVOC):
 
 
 def get_serial():
-    return 'MOCK_fake_unit'
+    return serial

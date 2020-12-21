@@ -10,8 +10,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 
-# board_service = importlib.import_module('board_service_mock')
-board_service = importlib.import_module('board_service')
+board_service = importlib.import_module('board_service_mock')
+# board_service = importlib.import_module('board_service')
 
 board_service.init()
 

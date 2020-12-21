@@ -3,11 +3,12 @@ import busio
 import bme680
 import adafruit_sgp30
 
-sensor = None
-sgp30 = None
-serial = None
-
 def init():
+    
+    global sgp30
+    global sensor
+    global serial
+
     i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
     sgp30 = adafruit_sgp30.Adafruit_SGP30(i2c)
     sensor = bme680.BME680()
