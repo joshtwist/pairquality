@@ -39,14 +39,14 @@ def get_baselines():
 def set_board_baselines(eCO2, TVOC):
 
     # convert strings to hex if necessary
-    if isinstance(eC02, str):
+    if isinstance(eCO2, str):
         eCO2 = int(eCO2, 16)
 
     if isinstance(TVOC, str):
         TVOC = int(TVOC, 16)
 
     sgp30.set_iaq_baseline(eCO2, TVOC)
-    print('set_iaq_baseline %s %s' % (hex(eC02), hex(TVOC)))
+    print('set_iaq_baseline %s %s' % (hex(eCO2), hex(TVOC)))
     
 def get_serial():
     return serial
