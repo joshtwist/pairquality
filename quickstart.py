@@ -72,7 +72,7 @@ def getBaselinesFromSheet(serial):
         cursor = 0
         for row in rows:
             if (row[0] == serial):
-                range = "Baselines!A%s:D" % (2+cursor)
+                range = "Baselines!A%s:E" % (2+cursor)
                 return {
                     'found_range': range,
                     'values': row
