@@ -3,6 +3,7 @@ import pickle
 import os.path
 import sys
 import time
+import socket
 import importlib
 from datetime import datetime
 from google.oauth2 import service_account
@@ -30,17 +31,29 @@ def dt_string():
     now = datetime.now()
     return now.strftime("%Y-%m-%d %H:%M:%S")
 
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
 def getSheets():
     creds = service_account.Credentials.from_service_account_file(CREDENTIALS_FILE_NAME, scopes=SCOPES)
     service = build('sheets', 'v4', credentials=creds)
     sheets = service.spreadsheets()
     return sheets
 
-def insertBaseline(baselines):
+def insertBaseline(baselines, ip):
     body = {
             "majorDimension": "ROWS",
             "values": [
-                [baselines['serial'], dt_string(), baselines['eCO2'], baselines['TVOC']]
+                [baselines['serial'], dt_string(), baselines['eCO2'], baselines['TVOC'], ip]
             ]
         }
     
@@ -68,13 +81,13 @@ def getBaselinesFromSheet(serial):
 
     return None
 
-def writeBaseline(baselines):
+def writeBaseline(baselines, ip):
     
     sheet_scan = getBaselinesFromSheet(baselines['serial'])
 
     if not sheet_scan:
         print('no matching data found... creating row')
-        insertBaseline(baselines)
+        insertBaseline(baselines, ip)
         print('created new row for %s' % baselines['serial'])
 
     else:
@@ -83,7 +96,7 @@ def writeBaseline(baselines):
         body = {
                 "majorDimension": "ROWS",
                 "values": [
-                    [baselines['serial'], dt_string(), baselines['eCO2'], baselines['TVOC']]
+                    [baselines['serial'], dt_string(), baselines['eCO2'], baselines['TVOC'], ip]
                 ]
             }
 
@@ -142,7 +155,7 @@ def main():
 
         if (counter >= baseline_frequency):
             baselines = board_service.get_baselines()
-            writeBaseline(baselines)
+            writeBaseline(baselines, get_ip())
             counter = 0
 
         time.sleep(sec_gap)
