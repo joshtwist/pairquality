@@ -23,7 +23,7 @@ board_service.init()
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 SPREADSHEET_ID = '1zSe0sMCBItdgZNqvWFC5JvJgqTDpHuC6ibnsdur9KDk'
-BASELINE_RANGE = 'Baselines!A2:D'
+BASELINE_RANGE = 'Baselines!A2:E'
 READINGS_RANGE = 'Readings!A2:F'
 CREDENTIALS_FILE_NAME = 'credentials.json'
 
