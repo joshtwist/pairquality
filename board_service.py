@@ -19,6 +19,9 @@ def init():
 def get_readings():
     # sensor.data.temperature, sensor.data.pressure, sensor.data.humidity
     # sgp30.eCO2, sgp30.TVOC
+    if not sensor.get_sensor_data():
+        print('get_sensor_data() failed')
+        
     return {
         'serial': serial,
         'eCO2': sgp30.eCO2,
