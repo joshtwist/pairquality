@@ -7,6 +7,7 @@ What you'll need
 * Raspberry Pi
 * SGP 30 Air Quality sensor
 * BME 680 Environment sensor
+* Sparkfun SerLCD (Qwiic version)
 
 To get started you'll need to hook both up to the SDA and SCL pins of your Raspberry Pi (I use the Qwiic connector for the SGP 30 and chain this onto the pimaroni BME680).
 
@@ -25,6 +26,7 @@ For anything to work you'll need to enable SCL and I2C on your Pi:
 Tutorials for these two boards are available here:
 * https://learn.adafruit.com/adafruit-sgp30-gas-tvoc-eco2-mox-sensor/circuitpython-wiring-test
 * https://learn.pimoroni.com/tutorial/sandyj/getting-started-with-bme680-breakout
+* https://github.com/fourstix/Sparkfun_CircuitPython_SerLCD
 
 ## Kicking off the process
 
