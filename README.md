@@ -16,8 +16,8 @@ For anything to work you'll need to enable SCL and I2C on your Pi:
 1. Pi Menu > Preferences > Raspberry Pi Configuration > Interfaces (Tab) 
 2. Enable SCL and I2C
 3. Install the packages for the two components
-  * pip3 install RPI.GPIO
-  * pip3 install adafruit-blinka
+  * sudo pip3 install RPI.GPIO
+  * sudo pip3 install adafruit-blinka
   * sudo pip3 install adafruit-circuitpython-sgp30
   * sudo pip3 install bme680
   * sudo pip3 install sparkfun-circuitpython-serlcd
