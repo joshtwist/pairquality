@@ -1,11 +1,14 @@
 from __future__ import print_function
 import pickle
 import os.path
+import board
+import busio
 import sys
 import time
 import socket
 import importlib
 from datetime import datetime
+from sparkfun_serlcd import Sparkfun_SerLCD_I2C
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -26,6 +29,10 @@ SPREADSHEET_ID = '1zSe0sMCBItdgZNqvWFC5JvJgqTDpHuC6ibnsdur9KDk'
 BASELINE_RANGE = 'Baselines!A2:E'
 READINGS_RANGE = 'Readings!A2:F'
 CREDENTIALS_FILE_NAME = 'credentials.json'
+
+i2c = busio.I2C(board.SCL, board.SDA)
+serlcd = Sparkfun_SerLCD_I2C(i2c)
+
 
 def dt_string():
     now = datetime.now()
@@ -119,12 +126,33 @@ def writeReading(readings):
 
     output = "Updated readings: {0:.2f} C, {1:.2f} hPa, {2:.2f} %RH, {3:.0f} CO2 ppm, {4:.0f} VOC ppb".format(
         readings['temperature'], readings['pressure'], readings['humidity'], readings['eCO2'], readings['TVOC'])
-    print(output)
+    #print(output)
+    
+def updateDisplay(readings):
+    
+    co2 = readings['eCO2']
+    message = "{2:.1f}c {0:.0f}ppm\r\n{1:.0f}ppb".format(readings['eCO2'], readings['TVOC'], readings['temperature'])
+    print(message)
+    
+    if co2 > 2000:
+        serlcd.set_backlight(0xFF8C00) #orange
+    elif co2 > 1000:
+        serlcd.set_backlight_rgb(255, 0, 0) #bright red
+    else:
+        serlcd.set_backlight_rgb(255, 255, 255) #bright white
+        
+    serlcd.clear()
+    serlcd.write(message)
 
 def main():
+    
+    serlcd.clear()
+    serlcd.set_backlight(0xA020F0) #violet
 
     sec_gap = 60 # how many seconds between readings
     baseline_frequency = 60 # how many readings between baseline updates
+    
+    serlcd.write('Frequency %ss\r\nBaseline %s ' % (sec_gap, baseline_frequency))
 
     if args_count > 1:
         sec_gap = int(sys.argv[2])
@@ -150,6 +178,7 @@ def main():
 
         readings = board_service.get_readings()
         writeReading(readings)
+        updateDisplay(readings)
 
         counter += 1
 
