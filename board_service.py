@@ -20,7 +20,7 @@ def init():
     sgp30.iaq_init()
     print('Initiated real Board Service for SGP30 Serial ', serial)
 
-    lcd_i2c = busio.I2C(board.CSL, board.SDA)
+    lcd_i2c = busio.I2C(board.SCL, board.SDA)
     serlcd = Sparkfun_SerLCD_I2C(lcd_i2c)
     
 
