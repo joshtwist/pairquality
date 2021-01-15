@@ -1,14 +1,12 @@
 from __future__ import print_function
 import pickle
 import os.path
-import board
-import busio
 import sys
 import time
 import socket
 import importlib
 from datetime import datetime
-from sparkfun_serlcd import Sparkfun_SerLCD_I2C
+
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -29,9 +27,6 @@ SPREADSHEET_ID = '1zSe0sMCBItdgZNqvWFC5JvJgqTDpHuC6ibnsdur9KDk'
 BASELINE_RANGE = 'Baselines!A2:E'
 READINGS_RANGE = 'Readings!A2:F'
 CREDENTIALS_FILE_NAME = 'credentials.json'
-
-i2c = busio.I2C(board.SCL, board.SDA)
-serlcd = Sparkfun_SerLCD_I2C(i2c)
 
 
 def dt_string():
@@ -126,33 +121,34 @@ def writeReading(readings):
 
     output = "Updated readings: {0:.2f} C, {1:.2f} hPa, {2:.2f} %RH, {3:.0f} CO2 ppm, {4:.0f} VOC ppb".format(
         readings['temperature'], readings['pressure'], readings['humidity'], readings['eCO2'], readings['TVOC'])
-    #print(output)
+    print(output)
     
 def updateDisplay(readings):
     
     co2 = readings['eCO2']
-    message = "{2:.1f}c {0:.0f}ppm\r\n{1:.0f}ppb".format(readings['eCO2'], readings['TVOC'], readings['temperature'])
+    now = datetime.now()
+    message = "{3} {2:.1f}c\r\n{0:.0f}ppm {1:.0f}ppb".format(readings['eCO2'], readings['TVOC'], readings['temperature'], now.strftime("%H:%M%p"))
     print(message)
     
     if co2 > 2000:
-        serlcd.set_backlight(0xFF8C00) #orange
+        board_service.lcd_set_backlight_hex(0xFF8C00) #orange
     elif co2 > 1000:
-        serlcd.set_backlight_rgb(255, 0, 0) #bright red
+        board_service.lcd_set_backlight_hex(0xFF0000) #bright red
     else:
-        serlcd.set_backlight_rgb(255, 255, 255) #bright white
+        board_service.lcd_set_backlight_hex(0xFFFFFF) #bright white
         
-    serlcd.clear()
-    serlcd.write(message)
+    board_service.lcd_clear()
+    board_service.lcd_write(message)
 
 def main():
     
-    serlcd.clear()
-    serlcd.set_backlight(0xA020F0) #violet
+    board_service.lcd_clear()
+    board_service.lcd_set_backlight_hex(0xA020F0) #violet
 
-    sec_gap = 60 # how many seconds between readings
-    baseline_frequency = 60 # how many readings between baseline updates
+    sec_gap = 60 # default - how many seconds between readings
+    baseline_frequency = 60 # default - how many readings between baseline updates
     
-    serlcd.write('Frequency %ss\r\nBaseline %s ' % (sec_gap, baseline_frequency))
+    board_service.lcd_write('Frequency %ss\r\nBaseline %s ' % (sec_gap, baseline_frequency))
 
     if args_count > 1:
         sec_gap = int(sys.argv[2])
@@ -160,9 +156,11 @@ def main():
     if args_count > 2:
         baseline_frequency = int(sys.argv[3])
 
-    print("Initialized with reading delay %ss and baseline frequency of every %s reads" % (sec_gap, baseline_frequency))
+    print("Initialized with writing delay %ss and baseline frequency of every %s reads" % (sec_gap, baseline_frequency))
 
-    counter = 0
+    loop_counter = 0
+    write_counter = 0
+
     serial = board_service.get_readings()['serial']
 
     # read baselines from spreadsheet if available
@@ -176,18 +174,22 @@ def main():
 
     while True:
 
+        loop_counter += 1
+
         readings = board_service.get_readings()
-        writeReading(readings)
         updateDisplay(readings)
 
-        counter += 1
+        if (loop_counter >= sec_gap):
+            writeReading(readings)
+            write_counter += 1
+            loop_counter = 0
 
-        if (counter >= baseline_frequency):
-            baselines = board_service.get_baselines()
-            writeBaseline(baselines, get_ip())
-            counter = 0
+            if (write_counter >= baseline_frequency):
+                baselines = board_service.get_baselines()
+                writeBaseline(baselines, get_ip())
+                write_counter = 0
 
-        time.sleep(sec_gap)
+        time.sleep(1)
 
 if __name__ == '__main__':
     main()

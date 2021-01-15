@@ -1,4 +1,5 @@
 import random
+import time
 
 def init():
     global serial 
@@ -28,3 +29,13 @@ def set_board_baselines( eCO2, TVOC):
 
 def get_serial():
     return serial
+
+def lcd_clear():
+    print("<LCD CLEAR>")
+    time.sleep(0.1)
+
+def lcd_write(message):
+    print("LCD: %s " % message)
+
+def lcd_set_backlight_hex(hex):
+    print("<LCD BACKLIGHT %s>" % hex)
