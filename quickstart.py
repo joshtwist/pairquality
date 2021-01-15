@@ -127,7 +127,9 @@ def updateDisplay(readings):
     
     co2 = readings['eCO2']
     now = datetime.now()
-    message = "{3} {2:.1f}c\r\n{0:.0f}ppm {1:.0f}ppb".format(readings['eCO2'], readings['TVOC'], readings['temperature'], now.strftime("%H:%M%p"))
+    tempf = readings['temperature'] * 1.8 + 32
+    # conver to f because america
+    message = "{3} {2:.1f}f\r\n{0:.0f}ppm {1:.0f}ppb".format(readings['eCO2'], readings['TVOC'], tempf, now.strftime("%H:%M%p"))
     print(message)
     
     if co2 > 2000:
