@@ -10,6 +10,7 @@ def init():
     global sgp30
     global sensor
     global serial
+    global serlcd
 
     i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
     serlcd = Sparkfun_SerLCD_I2C(i2c)
