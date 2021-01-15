@@ -13,12 +13,16 @@ def init():
     global serlcd
 
     i2c = busio.I2C(board.SCL, board.SDA, frequency=100000)
-    serlcd = Sparkfun_SerLCD_I2C(i2c)
+    
     sgp30 = adafruit_sgp30.Adafruit_SGP30(i2c)
     sensor = bme680.BME680()
     serial = '-'.join(str(e) for e in sgp30.serial)
     sgp30.iaq_init()
     print('Initiated real Board Service for SGP30 Serial ', serial)
+
+    lcd_i2c = busio.I2C(board.CSL, board.SDA)
+    serlcd = Sparkfun_SerLCD_I2C(lcd_i2c)
+    
 
 def get_readings():
     attempts = 0
