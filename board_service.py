@@ -58,13 +58,24 @@ def set_board_baselines(eCO2, TVOC):
 def get_serial():
     return serial
 
-
 def lcd_clear():
-    serlcd.clear()
-    time.sleep(0.1)
+    try:
+        serlcd.clear()
+    except OSError as ose:
+        print(ose)
+        # common with serlcd :( - just sleep
+        time.sleep(0.1)
 
 def lcd_write(message):
-    serlcd.write(message)
+    try:
+        serlcd.write(message)
+    except OSError as ose:
+        print(ose)
+        time.sleep(0.1)
 
 def lcd_set_backlight_hex(hex):
-    serlcd.set_backlight(hex) 
+    try:
+        serlcd.set_backlight(hex) 
+    except OSError as ose:
+        print(ose)
+        time.sleep(0.1)
