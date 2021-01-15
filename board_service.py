@@ -39,7 +39,7 @@ def get_readings():
                 }
         except OSError as ose:
             attempts += 1
-            print(ose)
+            print("attempt %s: %s" % (attempts, ose))
             time.sleep(0.1)
 
 def get_baselines():
@@ -73,7 +73,7 @@ def lcd_clear():
             return
         except OSError as ose:
             attempts += 1
-            print(ose)
+            print("attempt %s: %s" % (attempts, ose))
             time.sleep(0.1)
             
 def lcd_write(message):
@@ -84,7 +84,7 @@ def lcd_write(message):
             return
         except OSError as ose:
             attempts += 1
-            print(ose)
+            print("attempt %s: %s" % (attempts, ose))
             time.sleep(0.1)
 
 def lcd_set_backlight_hex(hex):
@@ -95,5 +95,5 @@ def lcd_set_backlight_hex(hex):
             return
         except OSError as ose:
             attempts += 1
-            print(ose)
+            print("attempt %s: %s" % (attempts, ose))
             time.sleep(0.1)
