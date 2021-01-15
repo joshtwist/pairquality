@@ -21,19 +21,26 @@ def init():
     print('Initiated real Board Service for SGP30 Serial ', serial)
 
 def get_readings():
-    # sensor.data.temperature, sensor.data.pressure, sensor.data.humidity
-    # sgp30.eCO2, sgp30.TVOC
-    if not sensor.get_sensor_data():
-        print('get_sensor_data() failed')
-        
-    return {
-        'serial': serial,
-        'eCO2': sgp30.eCO2,
-        'TVOC': sgp30.TVOC,
-        'temperature': sensor.data.temperature,
-        'pressure': sensor.data.pressure,
-        'humidity': sensor.data.humidity
-    }
+    attempts = 0
+    while attempts < 3:
+        try:
+            # sensor.data.temperature, sensor.data.pressure, sensor.data.humidity
+            # sgp30.eCO2, sgp30.TVOC
+            if not sensor.get_sensor_data():
+                print('get_sensor_data() failed')
+            else:   
+                return {
+                    'serial': serial,
+                    'eCO2': sgp30.eCO2,
+                    'TVOC': sgp30.TVOC,
+                    'temperature': sensor.data.temperature,
+                    'pressure': sensor.data.pressure,
+                    'humidity': sensor.data.humidity
+                }
+        except OSError as ose:
+            attempts += 1
+            print(ose)
+            time.sleep(0.1)
 
 def get_baselines():
     # sgp30.baseline_eCO2, sgp30.baseline_TVOC
@@ -59,23 +66,34 @@ def get_serial():
     return serial
 
 def lcd_clear():
-    try:
-        serlcd.clear()
-    except OSError as ose:
-        print(ose)
-        # common with serlcd :( - just sleep
-        time.sleep(0.1)
-
+    attempts = 0
+    while attempts < 3:
+        try:
+            serlcd.clear()
+            return
+        except OSError as ose:
+            attempts += 1
+            print(ose)
+            time.sleep(0.1)
+            
 def lcd_write(message):
-    try:
-        serlcd.write(message)
-    except OSError as ose:
-        print(ose)
-        time.sleep(0.1)
+    attempts = 0
+    while attempts < 3:
+        try:
+            serlcd.write(message)
+            return
+        except OSError as ose:
+            attempts += 1
+            print(ose)
+            time.sleep(0.1)
 
 def lcd_set_backlight_hex(hex):
-    try:
-        serlcd.set_backlight(hex) 
-    except OSError as ose:
-        print(ose)
-        time.sleep(0.1)
+    attempts = 0
+    while attempts < 3:
+        try:
+            serlcd.set_backlight(hex) 
+            return
+        except OSError as ose:
+            attempts += 1
+            print(ose)
+            time.sleep(0.1)
